@@ -433,6 +433,134 @@
         }
 
       ]
+    },
+    {
+      "root": "packageF",
+      "independent": true,
+      "pages": [
+        {
+          "path": "pages/aioveu_member/member_level/index",
+          "style": {
+            "navigationBarTitleText": "会员等级管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member_level/form",
+          "style": {
+            "navigationBarTitleText": "会员等级表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member/index",
+          "style": {
+            "navigationBarTitleText": "会员信息管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member/form",
+          "style": {
+            "navigationBarTitleText": "会员信息管理表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member_account/index",
+          "style": {
+            "navigationBarTitleText": "会员充值账户管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member_account/form",
+          "style": {
+            "navigationBarTitleText": "会员充值账户表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member_recharge_record/index",
+          "style": {
+            "navigationBarTitleText": "会员充值记录管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_member/member_recharge_record/form",
+          "style": {
+            "navigationBarTitleText": "会员充值记录表单"
+          }
+        },
+        {
+          "path": "pages/aioveu_member/member_recharge_record/recharge",
+          "style": {
+            "navigationBarTitleText": "会员充值表单"
+          }
+        }
+      ]
+    },
+    {
+      "root": "packageG",
+      "independent": true,
+      "pages": [
+        {
+          "path": "pages/aioveu_laundry/laundry_order/index",
+          "style": {
+            "navigationBarTitleText": "洗护订单管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_order/form",
+          "style": {
+            "navigationBarTitleText": "洗护订单表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_clothing_type/index",
+          "style": {
+            "navigationBarTitleText": "衣物类型管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_clothing_type/form",
+          "style": {
+            "navigationBarTitleText": "衣物类型表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_order_item/index",
+          "style": {
+            "navigationBarTitleText": "洗护订单衣物明细管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_order_item/form",
+          "style": {
+            "navigationBarTitleText": "洗护订单衣物明细表单"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_process_image/index",
+          "style": {
+            "navigationBarTitleText": "洗护流程图片管理"
+          }
+        },
+
+        {
+          "path": "pages/aioveu_laundry/laundry_process_image/form",
+          "style": {
+            "navigationBarTitleText": "洗护流程图片表单"
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {

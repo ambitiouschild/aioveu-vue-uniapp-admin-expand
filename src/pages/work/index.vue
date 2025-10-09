@@ -25,6 +25,64 @@
 <script lang="ts" setup>
 const gridList = reactive([
   {
+    title: "洗护管理",
+    children: [
+      {
+        icon: "/static/icons/logo.png",
+        title: "洗衣订单",
+        url: "/packageG/pages/aioveu_laundry/laundry_order/index",
+        prem: "aioveuLaundryOrder:aioveu-laundry-order:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "衣物类型",
+        url: "/packageG/pages/aioveu_laundry/laundry_clothing_type/index",
+        prem: "aioveuLaundryClothingType:aioveu-laundry-clothing-type:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "洗衣订单衣物明细",
+        url: "/packageG/pages/aioveu_laundry/laundry_order_item/index",
+        prem: "aioveuLaundryOrderItem:aioveu-laundry-order-item:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "洗衣流程图片记录",
+        url: "/packageG/pages/aioveu_laundry/laundry_process_image/index",
+        prem: "aioveuLaundryProcessImage:aioveu-laundry-process-image:query",
+      },
+    ],
+  },
+  {
+    title: "会员管理",
+    children: [
+      {
+        icon: "/static/icons/logo.png",
+        title: "会员等级",
+        url: "/packageF/pages/aioveu_member/member_level/index",
+        prem: "aioveuMemberLevel:aioveu-member-level:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "会员信息",
+        url: "/packageF/pages/aioveu_member/member/index",
+        prem: "aioveuMember:aioveu-member:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "会员充值账户",
+        url: "/packageF/pages/aioveu_member/member_account/index",
+        prem: "aioveuMemberAccount:aioveu-member-account:query",
+      },
+      {
+        icon: "/static/icons/logo.png",
+        title: "会员充值记录",
+        url: "/packageF/pages/aioveu_member/member_recharge_record/index",
+        prem: "aioveuMemberRechargeRecord:aioveu-member-recharge-record:query",
+      },
+    ],
+  },
+  {
     title: "人员管理",
     children: [
       {
