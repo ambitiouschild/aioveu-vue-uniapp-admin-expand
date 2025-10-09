@@ -139,7 +139,7 @@
       >
         <view class="card-header">
           <text class="order-no">{{ item.orderNo }}</text>
-<!--          <text class="image-type">{{ getImageTypeText(item.imageType) }}</text>-->
+          <text class="image-type">{{ getImageTypeText(item.imageType) }}</text>
         </view>
 
         <view class="card-content">
@@ -545,12 +545,13 @@ export default {
       }, 2000);
     };
 
+
     // 加载订单选项
     const loadOrderOptions = () => {
       AioveuLaundryOrderAPI.getAllLaundryOrderOptions()
         .then(response => {
-          if (Array.isArray(response.data)) {
-            orderOptions.value = response.data;
+          if (Array.isArray(response)) {
+            orderOptions.value = response;
           }
         })
         .catch(error => {
@@ -562,8 +563,8 @@ export default {
     const loadItemOptions = () => {
       AioveuLaundryOrderItemAPI.getAllLaundryOrderItemOptions()
         .then(response => {
-          if (Array.isArray(response.data)) {
-            itemOptions.value = response.data;
+          if (Array.isArray(response)) {
+            itemOptions.value = response;
           }
         })
         .catch(error => {
@@ -575,7 +576,7 @@ export default {
     const loadImageTypeOptions = () => {
       DictAPI.getDictItems('laundry_process_image_image_type')
         .then(response => {
-          imageTypeOptions.value = response.data;
+          imageTypeOptions.value = response;
         })
         .catch(error => {
           console.error('加载图片类型选项失败:', error);
@@ -586,8 +587,8 @@ export default {
     const loadEmployeeOptions = () => {
       AioveuEmployeeAPI.getAllEmployeeOptions()
         .then(response => {
-          if (Array.isArray(response.data)) {
-            employeeOptions.value = response.data;
+          if (Array.isArray(response)) {
+            employeeOptions.value = response;
           }
         })
         .catch(error => {
