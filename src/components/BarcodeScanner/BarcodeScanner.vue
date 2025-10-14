@@ -352,7 +352,14 @@ const trySwitchToRearCamera = async () => {
 
 // 查找后置摄像头索引
 const findRearCameraIndex = (): number => {
-  // 策略1: 标签匹配
+  // 策略1: 标签匹配  策略优先级：标签匹配策略优先级高于设备ID匹配
+  // 顺序执行：只有当标签匹配失败（返回-1）时，才执行设备ID匹配
+  //   避免重复匹配
+  // 效率优化：如果标签匹配已找到设备，跳过设备ID匹配
+
+  //   3. 处理查找失败
+  // 查找失败标识：findIndex()方法在未找到匹配项时返回 -1
+  // 失败处理：当标签匹配失败时，尝试备选策略
   let index = devices.value.findIndex(device =>
     device.label?.toLowerCase().includes('back') ||
     device.label?.toLowerCase().includes('rear') ||
