@@ -39,6 +39,7 @@
     </div>
 
     <!-- 设备列表 -->
+<!--    遍历devices数组，为每个设备生成一个列表项。-->
     <div v-if="showDeviceList" class="device-list">
       <p>选择摄像头:</p>
       <ul>
@@ -48,6 +49,7 @@
           @click="selectDevice(index)"
           :class="{active: deviceIndex === index}"
         >
+<!--          :class="{active: deviceIndex === index}"：动态绑定class，如果当前设备的索引（index）等于选中的设备索引（deviceIndex），则添加active类，用于高亮显示当前选中的设备。-->
           {{ device.label || `摄像头 ${index + 1}` }}
         </li>
       </ul>
