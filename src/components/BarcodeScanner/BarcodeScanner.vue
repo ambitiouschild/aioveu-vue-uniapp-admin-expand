@@ -126,6 +126,11 @@ const initDevices = async () => {
       throw new Error('浏览器不支持设备枚举');
     }
 
+    //在 initDevices中，我们获取权限后重新枚举设备，但是注意，在权限授予前，设备列表可能只有空ID的设备，权限授予后，设备列表会更新为有ID的设备。所以我们需要确保在权限授予后，再获取设备列表。
+    // 先获取用户媒体权限，这样设备标签才会显示
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    stream.getTracks().forEach(track => track.stop());
+
     // 获取所有设备
     const allDevices = await navigator.mediaDevices.enumerateDevices();
     devices.value = allDevices.filter(device => device.kind === 'videoinput');
@@ -234,6 +239,7 @@ const startCamera = async () => {
     optimizeScannerSettings();
 
     const deviceId = devices.value[deviceIndex.value].deviceId;
+    console.log('设备id:', deviceId);
     const constraints = getConstraintsForDevice(deviceId);
 
     console.log('约束设置:', constraints);
@@ -482,12 +488,25 @@ const getConstraintsForDevice = (deviceId: string) => {
     return { video: true };
   }
 
+
+
+  // 如果设备ID为空，则不使用设备ID约束
+  const videoConstraints: any = {};
+  if (deviceId) {
+    videoConstraints.deviceId = { exact: deviceId };
+  }
+
+  // 添加其他约束
+  videoConstraints.width = { ideal: 1280 };
+  videoConstraints.height = { ideal: 720 };
+
   // Safari需要明确的facingMode
   if (isSafari()) {
     const isRearCamera = device.label.toLowerCase().includes('back') ||
       device.label.toLowerCase().includes('rear') ||
       device.label.toLowerCase().includes('environment');
 
+    //OverconstrainedError表示浏览器无法满足您对摄像头设置的约束条件
     return {
       video: {
         deviceId: { exact: deviceId },
@@ -505,7 +524,7 @@ const getConstraintsForDevice = (deviceId: string) => {
   //     height: { ideal: 720 }
   //   }
 
-  // 使用更宽松的约束  视频分辨率太低，无法清晰捕捉二维码  提高视频分辨率设置
+  // 使用更宽松的约束  视频分辨率太低，无法清晰捕捉二维码  提高视频分辨率设置  同时指定了deviceId和facingMode，这在某些浏览器中会产生冲突
   return {
     video: {
       deviceId: { exact: deviceId },
@@ -515,6 +534,17 @@ const getConstraintsForDevice = (deviceId: string) => {
     }
 
   };
+  // 针对电脑摄像头的优化约束
+
+    // 宽松模式（第二次尝试）
+    // return {
+    //   video: {
+    //     deviceId: { exact: deviceId },
+    //     width: { ideal: 640 },
+    //     height: { ideal: 480 },
+    //     frameRate: { ideal: 15 }
+    //   }
+    // };
 };
 
 
