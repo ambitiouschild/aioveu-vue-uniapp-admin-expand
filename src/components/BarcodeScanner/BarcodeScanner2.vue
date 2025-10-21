@@ -285,15 +285,15 @@ const startCamera = async () => {
         });
 
         console.log('视频准备就绪');
-        startScanning();
+
         // Safari需要用户交互才能播放视频
-        // if (isSafari()) {
-        //   console.log('Safari浏览器，显示点击提示');
-        //   showClickHint.value = true;
-        // } else {
-        //   console.log('非Safari浏览器，直接开始扫描');
-        //   startScanning();
-        // }
+        if (isSafari()) {
+          console.log('Safari浏览器，显示点击提示');
+          showClickHint.value = true;
+        } else {
+          console.log('非Safari浏览器，直接开始扫描');
+          startScanning();
+        }
       }
     }
   } catch (error) {
@@ -303,7 +303,7 @@ const startCamera = async () => {
 };
 
 // 尝试切换到后置摄像头
-const trySwitchToRearCamera = async (): Promise<boolean> => {
+const trySwitchToRearCamera = async () => {
   try {
     console.log('尝试切换到后置摄像头...');
 
@@ -337,59 +337,9 @@ const trySwitchToRearCamera = async (): Promise<boolean> => {
       currentDeviceLabel.value = device.label || `摄像头 ${deviceIndex.value + 1}`;
       console.log('切换到后置摄像头:', currentDeviceLabel.value);
 
-      //在 trySwitchToRearCamera 中直接开始扫描 而不是重新启动摄像头
-      // await startCamera();
-      //1. 流程差异:在trySwitchToRearCamera中完成摄像头切换后，直接设置视频源并开始扫描，避免了重新调用startCamera的完整流程。
-      // 2. 时间效率    直接开始扫描：在切换摄像头后立即开始扫描，减少了不必要的步骤，从而降低了延迟。
-      //3. 逻辑清晰度: 直接开始扫描：流程线性，逻辑更清晰，减少了嵌套调用。
-      //4. 资源消耗 直接开始扫描：在同一个方法内完成资源释放和新资源获取，资源管理更集中
-
-      // 获取设备ID
-      const deviceId = device.deviceId;
-
-      // 创建约束
-      const constraints = getConstraintsForDevice(deviceId);
-      console.log('约束设置:', constraints);
-
-      // 获取新流
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      currentStream.value = stream;
-      console.log('获取到新流');
-
-      // 设置视频源
-      if (videoElement.value) {
-        const nativeVideo = getNativeVideoElement();
-        if (nativeVideo) {
-          nativeVideo.srcObject = stream;
-          console.log('视频源已设置');
-
-          // 等待视频加载
-          await new Promise<void>((resolve) => {
-            const onLoaded = () => {
-              console.log('视频元数据已加载');
-              nativeVideo.removeEventListener('loadedmetadata', onLoaded);
-              resolve();
-            };
-
-            nativeVideo.addEventListener('loadedmetadata', onLoaded);
-
-            // 设置超时
-            setTimeout(() => {
-              console.log('视频加载超时，继续执行');
-              nativeVideo.removeEventListener('loadedmetadata', onLoaded);
-              resolve();
-            }, 200);
-          });
-
-          console.log('视频准备就绪');
-
-            // 非Safari，直接开始扫描
-            startScanning();
-
-          // 返回成功
-          return true;
-        }
-      }
+      // 重新启动摄像头
+      await startCamera();
+      return true;
     }
 
     console.log('未找到后置摄像头或已经是后置摄像头');
@@ -685,7 +635,6 @@ const switchCameraInSafari = async (deviceId: string) => {
 // 通用摄像头启动方法
 const startCameraWithDevice = async (deviceId: string) => {
   const constraints = getConstraintsForDevice(deviceId);
-  console.log('约束设置:', constraints);
 
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   currentStream.value = stream;
@@ -743,15 +692,6 @@ const toggleCamera = async () => {
       await startCameraWithDevice(device.deviceId);
     }
 
-    // 华为手机特殊处理
-    if (isHuawei()) {
-      console.log('华为手机，使用专用切换方法');
-      await switchCameraForHuawei(device.deviceId);
-    } else {
-      console.log('非华为手机，使用通用方法');
-      await startCameraWithDevice(device.deviceId);
-    }
-
     // 显示设备列表
     showDeviceList.value = true;
     setTimeout(() => {
@@ -782,82 +722,6 @@ const toggleCamera = async () => {
     }
   } finally {
     cameraSwitching.value = false;
-  }
-};
-
-// 检测华为手机
-const isHuawei = (): boolean => {
-  const ua = navigator.userAgent.toLowerCase();
-  return ua.indexOf('huawei') !== -1 || ua.indexOf('honor') !== -1;
-};
-
-// 华为手机专用切换方法
-const switchCameraForHuawei = async (deviceId: string) => {
-  try {
-    console.log('华为手机专用切换方法');
-
-    // 1. 停止当前流
-    if (currentStream.value) {
-      currentStream.value.getTracks().forEach(track => track.stop());
-      currentStream.value = null;
-    }
-
-    // 2. 创建新约束
-    const constraints = {
-      video: {
-        deviceId: { exact: deviceId },
-        width: { min: 640, ideal: 1280, max: 1920 },
-        height: { min: 480, ideal: 720, max: 1080 },
-        frameRate: { ideal: 30, min: 15 }
-      }
-    };
-
-    console.log('华为约束:', constraints);
-
-    // 3. 获取新流
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    currentStream.value = stream;
-    console.log('获取到新流');
-
-    // 4. 等待DOM更新
-    await nextTick();
-
-    // 5. 获取视频元素
-    const videoElements = document.getElementsByClassName('scanner-video');
-    if (videoElements.length === 0) {
-      throw new Error('视频元素未创建');
-    }
-
-    const video = videoElements[0] as HTMLVideoElement;
-    console.log('DOM中找到视频元素');
-    videoElement.value = video;
-
-    // 6. 设置视频源
-    if (videoElement.value) {
-      const nativeVideo = getNativeVideoElement();
-      if (nativeVideo) {
-        nativeVideo.srcObject = stream;
-        console.log('视频源已设置');
-
-        // 7. 等待视频加载
-        await new Promise<void>((resolve) => {
-          const onLoaded = () => {
-            nativeVideo.removeEventListener('loadedmetadata', onLoaded);
-            resolve();
-          };
-
-          nativeVideo.addEventListener('loadedmetadata', onLoaded);
-        });
-
-        console.log('视频准备就绪');
-
-        // 8. 开始扫描
-        startScanning();
-      }
-    }
-  } catch (error) {
-    console.error('华为切换摄像头失败:', error);
-    throw error;
   }
 };
 

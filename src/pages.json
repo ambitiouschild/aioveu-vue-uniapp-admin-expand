@@ -3,7 +3,9 @@
     "autoscan": true,
     "custom": {
       "^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue",
-      "^cu-(.*)": "@/components/cu-$1/index.vue"
+      "^cu-(.*)": "@/components/cu-$1/index.vue",
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+      //如果不想全局注册，可以使用 easycom自动引入。在 pages.json中添加
     }
   },
   "lazyCodeLoading": "requiredComponents",
@@ -558,6 +560,12 @@
           "path": "pages/aioveu_laundry/laundry_process_image/form",
           "style": {
             "navigationBarTitleText": "洗护流程图片表单"
+          }
+        },
+        {
+          "path": "pages/aioveu_laundry/laundry_garment_info/index",
+          "style": {
+            "navigationBarTitleText": "衣物详情页面"
           }
         }
       ]
